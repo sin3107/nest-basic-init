@@ -2,13 +2,9 @@ import {
     Column,
     Entity,
     Index,
-    JoinColumn,
-    JoinTable,
-    ManyToMany,
-    OneToMany,
     OneToOne,
   } from 'typeorm';
-  import { CommonEntity } from 'src/common/entities/common.entity';
+  import { CommonEntity } from 'common/entities/common.entity';
   import { Profile } from './profile.entity';
   import { Exclude } from 'class-transformer';
 
@@ -40,30 +36,6 @@ import {
     @Column({ type: 'varchar', nullable: true })
     @Exclude()
     password?: string;
-  
-    @Column({ type: 'int', nullable: false, default: 0 })
-    sanctionCount: number;
-  
-    @Column({ type: Date, nullable: true })
-    sanctionDate: Date;
-  
-    @Column({ type: 'int', nullable: false, default: 0 })
-    reportCount: number;
-  
-    @Column({ type: 'boolean', nullable: false, default: true })
-    essentialAgree: boolean;
-  
-    @Column({ type: 'boolean', nullable: false, default: false })
-    customizedServiceAgree: boolean;
-  
-    @Column({ type: 'boolean', nullable: false, default: false })
-    marketingAgree: boolean;
-  
-    @Column({
-      type: 'varchar',
-      nullable: false,
-    })
-    userCode: string;
   
     @Column({ type: 'enum', enum: Provider, default: Provider.Local })
     provider: Provider;

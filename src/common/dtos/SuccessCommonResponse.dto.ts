@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { EnumToArray } from '../utils/enumNumberToArray';
+import { EnumToArray } from 'common/utils/enumNumberToArray';
 
 export class SuccessCommonResponseDto<T> {
   @ApiProperty({ enum: EnumToArray(HttpStatus), description: '상태코드', required: true })

@@ -1,16 +1,11 @@
 import { BadRequestException, HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { EnumToArray } from 'src/common/utils/enumNumberToArray';
+import { EnumToArray } from 'common/utils/enumNumberToArray';
 import { HttpErrorNameEnum } from './HttpErrorNameEnum';
 
 export class HttpExceptionErrorResponseDto {
-  // @ApiProperty({
-  //   enum: HttpErrorNameEnum,
-  //   description: '에러명',
-  // })
-  // @Expose()
-  // error: string;
+
 
   @ApiProperty({
     type: String,
@@ -18,13 +13,6 @@ export class HttpExceptionErrorResponseDto {
   })
   @Expose()
   message: string;
-
-  // @ApiProperty({
-  //   enum: EnumToArray(HttpStatus),
-  //   description: '상태코드 400~500번대만 봐주세용',
-  // })
-  // @Expose()
-  // statusCode: number;
 
   @ApiProperty({
     type: Number,
@@ -49,13 +37,4 @@ export class HttpExceptionErrorResponseDto {
     this.code = code;
   }
 
-  //   @ApiProperty({ type: () => PageMetaDto })
-  //   @Type(() => PageMetaDto)
-  //   @Expose()
-  //   readonly meta: PageMetaDto;
-
-  //   constructor(data: T[], meta: PageMetaDto) {
-  //     this.data = data;
-  //     this.meta = meta;
-  //   }
 }

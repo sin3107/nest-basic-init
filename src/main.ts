@@ -1,39 +1,26 @@
 import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { ConfigService } from '@nestjs/config';  // ✅ 추가
 import * as expressBasicAuth from 'express-basic-auth';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';
-import { AppModule } from './app.module';
 import * as expressSession from 'express-session';
+import * as morgan from 'morgan';
+import { join } from 'path';
 
+import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from './common/interceptors/sucess.interceptor';
 import { winstonLogger } from './common/utils/logger/logger.config';
 
-import { join } from 'path';
-import * as morgan from 'morgan';
-
-
-// 환경 변수 관리
-const config = {
-  isDevMode: process.env.NODE_ENV !== 'prod',
-  port: process.env.PORT || '3000',
-  corsOrigins: process.env.CORS_ORIGIN_LIST
-    ? process.env.CORS_ORIGIN_LIST.split(',').map((origin) => origin.trim())
-    : ['*'],
-  secretKey: process.env.SECRET_KEY || 'default_secret', // 기본값 추가
-  adminUser: process.env.ADMIN_USER || 'admin',
-  adminPassword: process.env.ADMIN_PASSWORD || 'password',
-};
-
 class Application {
   private logger = new Logger(Application.name);
 
-  constructor(private server: NestExpressApplication) {
-    if(!config.secretKey) {
-      this.logger.error('Set "SECRET_KEY" env');
+  constructor(private server: NestExpressApplication, private configService: ConfigService) {
+    if (!this.configService.get<string>('SECRET_KEY')) {
+      this.logger.error('Set "SECRET_KEY" in environment variables');
     }
   }
 
@@ -43,7 +30,7 @@ class Application {
       expressBasicAuth({
         challenge: true,
         users: {
-          [config.adminUser]: config.adminPassword,
+          [this.configService.get<string>('ADMIN_USER', 'admin')]: this.configService.get<string>('ADMIN_PASSWORD', 'password'),
         },
       })
     );
@@ -63,7 +50,7 @@ class Application {
 
   private async initializeApp() {
     this.server.enableCors({
-      origin: config.corsOrigins,
+      origin: this.configService.get<string>('CORS_ORIGIN_LIST', '*').split(',').map((origin) => origin.trim()),
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true,
     });
@@ -72,7 +59,6 @@ class Application {
     this.setUpBasicAuth();
     this.setUpOpenAPIMiddleware();
 
-    // ✅ 글로벌 설정을 하나의 배열로 정리 (가독성 향상)
     this.server.useGlobalPipes(new ValidationPipe({ transform: true, transformOptions: { enableImplicitConversion: true } }));
     this.server.useGlobalInterceptors(
       new ClassSerializerInterceptor(this.server.get(Reflector)),
@@ -82,7 +68,7 @@ class Application {
 
     this.server.use(
       expressSession({
-        secret: config.secretKey,
+        secret: this.configService.get<string>('SECRET_KEY', 'default_secret'),
         resave: true,
         saveUninitialized: true,
       })
@@ -98,15 +84,15 @@ class Application {
 
   async bootstrap() {
     await this.initializeApp();
-    await this.server.listen(config.port);
+    await this.server.listen(this.configService.get<string>('PORT', '3000'));
   }
 
   startLog() {
-    this.logger.log(`Server started on http://localhost:${config.port}`);
+    this.logger.log(`🚀 Server started on http://localhost:${this.configService.get<string>('PORT', '3000')}`);
   }
 
   errorLog(error: string) {
-    this.logger.error(`Server error: ${error}`);
+    this.logger.error(`❌ Server error: ${error}`);
   }
 }
 
@@ -115,7 +101,9 @@ async function init(): Promise<void> {
     logger: winstonLogger,
   });
 
-  const app = new Application(server);
+  const configService = server.get(ConfigService); // ✅ ConfigService 가져오기
+
+  const app = new Application(server, configService);
   await app.bootstrap();
   app.startLog();
 }

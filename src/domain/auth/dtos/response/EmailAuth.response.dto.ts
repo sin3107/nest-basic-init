@@ -1,4 +1,4 @@
-import { ApiProperty, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class EmailAuthResponseDTO {
   @ApiProperty({

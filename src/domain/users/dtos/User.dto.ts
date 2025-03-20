@@ -9,8 +9,8 @@ import {
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
-import { ProfileDTO } from './profile.dto';
-import { UserStatus } from '../entities/user.entity';
+import { ProfileDTO } from 'domain/users/dtos/Profile.dto';
+import { UserStatus } from 'domain/users/entities/user.entity';
 
 export enum Paid {
   ALL = 'ALL',
@@ -27,9 +27,6 @@ export class UserDTO {
   @IsEmail()
   @IsNotEmpty()
   email: string;
-
-  @ApiProperty({ description: 'userCode' })
-  userCode: string;
 
   @ApiProperty({ description: 'user name' })
   @IsString()
@@ -53,22 +50,6 @@ export class UserDTO {
   @ApiProperty({ description: 'refresh token' })
   @IsString()
   refreshToken: string;
-
-  @ApiProperty({ description: '신고 횟수', default: 0 })
-  @IsNumber()
-  reportCount: number;
-
-  @ApiProperty({ description: '필수동의', default: true })
-  @IsBoolean()
-  essentialAgree: boolean;
-
-  @ApiProperty({ description: '맞춤형 서비스 동의', default: true })
-  @IsBoolean()
-  customizedServiceAgree: boolean;
-
-  @ApiProperty({ description: '마케팅 수신 동의', default: true })
-  @IsBoolean()
-  marketingAgree: boolean;
 
   @ApiProperty()
   profile: ProfileDTO;

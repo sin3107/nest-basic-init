@@ -1,10 +1,10 @@
 import { applyDecorators, HttpException, HttpStatus, Type } from '@nestjs/common';
 import { ApiExtraModels, ApiOkResponse, ApiResponse, getSchemaPath, refs } from '@nestjs/swagger';
-import { ErrorCommonResponse } from '../errors/errorResponse/ErrorCommonResponse.dto';
-import { HttpExceptionErrorResponseDto } from '../errors/errorResponse/HttpExceptionError.response.dto';
-import { makeInstanceByApiProperty } from '../utils/makeInstanceByApiProperty';
+import { ErrorCommonResponse } from 'common/errors/errorResponse/ErrorCommonResponse.dto';
+import { HttpExceptionErrorResponseDto } from 'common/errors/errorResponse/HttpExceptionError.response.dto';
+import { makeInstanceByApiProperty } from 'common/utils/makeInstanceByApiProperty';
 import { object } from 'joi';
-import { ValidationErrorResponseDto } from '../errors/errorResponse/ValidationError.response.dto';
+import { ValidationErrorResponseDto } from 'common/errors/errorResponse/ValidationError.response.dto';
 
 export interface ErrorResponseOption {
   /**
@@ -61,6 +61,8 @@ export const ErrorResponse = (
       //     error.message
       //   );
       // }
+      // console.log('🔍 error 값:', error);
+
       if (typeof error.message !== 'string') {
         throw Error('http오류는 넘겨줄때 string 타입으로 주셔야합니다.');
       }

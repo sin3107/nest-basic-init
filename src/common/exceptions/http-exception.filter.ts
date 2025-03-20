@@ -4,14 +4,12 @@ import {
     ArgumentsHost,
     HttpException,
     HttpStatus,
-    UnauthorizedException,
     Logger,
   } from '@nestjs/common';
   import { ThrottlerException } from '@nestjs/throttler';
   import { Request, Response } from 'express';
-  import { AuthErrorDefine } from 'src/domain/auth/responseDefines/authErrors';
-  import { ErrorCommonResponse } from '../errors/errorResponse/ErrorCommonResponse.dto';
-  import { HttpExceptionErrorResponseDto } from '../errors/errorResponse/HttpExceptionError.response.dto';
+  import { ErrorCommonResponse } from 'common/errors/errorResponse/ErrorCommonResponse.dto';
+  import { HttpExceptionErrorResponseDto } from 'common/errors/errorResponse/HttpExceptionError.response.dto';
   import { QueryFailedError } from 'typeorm';
   
   @Catch()

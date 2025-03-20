@@ -8,7 +8,7 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from 'domain/users/entities/user.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity({

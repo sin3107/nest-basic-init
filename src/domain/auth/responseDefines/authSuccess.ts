@@ -1,6 +1,6 @@
-import { SuccessResponseOption } from 'src/common/decorators/SuccessResponse.decorator';
-import { GetUserInfoResponseDTO } from '../dto/response/GetUserInfo.response.dto';
-import { EmailAuthResponseDTO } from '../dto/response/EmailAuth.response.dto';
+import { SuccessResponseOption } from 'common/decorators/SuccessResponse.decorator';
+import { GetUserInfoResponseDTO } from 'domain/auth/dtos/response/GetUserInfo.response.dto';
+import { EmailAuthResponseDTO } from 'domain/auth/dtos/response/EmailAuth.response.dto';
 type Keys = 'Auth-S001' | 'Auth-S004';
 
 export const AuthSuccessDefine: Record<Keys, SuccessResponseOption & { code: string }> = {
