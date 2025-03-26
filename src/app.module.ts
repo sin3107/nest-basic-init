@@ -59,7 +59,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
     
     UsersModule,
     AuthModule,
-    
+  
   ],
   controllers: [AppController],
   providers: [AppService],

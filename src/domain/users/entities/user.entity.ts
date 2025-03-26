@@ -25,7 +25,6 @@ import {
   }
   
   @Index('email', ['email'], { unique: false })
-  @Index('userCode', ['userCode'], { unique: true })
   @Entity({
     name: 'USER',
   })
